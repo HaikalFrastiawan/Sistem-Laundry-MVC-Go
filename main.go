@@ -6,6 +6,10 @@ import (
 	"Sistem-Laundry/controllers/servicecontroller"
 	"Sistem-Laundry/controllers/clientcontroller"
 	"Sistem-Laundry/controllers/admincontroller"
+    "Sistem-Laundry/controllers/authcontroller"
+
+    
+    
 	"log"
 	"net/http"
 )
@@ -24,9 +28,10 @@ func main() {
     // 2. JALUR PELANGGAN (Client Area)
     // Semua yang diawali /client/ adalah milik user/Haikal
     // ---------------------------------------------------------
-    http.HandleFunc("/client/dashboard", clientcontroller.Dashboard)
-    http.HandleFunc("/client/order/create", clientcontroller.CreateOrder)
+    //middleware auth
+    http.HandleFunc("/client/dashboard", authcontroller.AuthMiddleware(clientcontroller.Dashboard))
 
+    http.HandleFunc("/client/order/create", clientcontroller.CreateOrder)
     // ---------------------------------------------------------
     // 3. JALUR ADMIN (Management Area)
     // Pastikan semua modul admin pakai awalan /admin/ agar rapi
@@ -42,6 +47,16 @@ func main() {
     http.HandleFunc("/admin/services/add", servicecontroller.Add)
     http.HandleFunc("/admin/services/edit", servicecontroller.Edit)
     http.HandleFunc("/admin/services/delete", servicecontroller.Delete)
+
+    //login customer
+    http.HandleFunc("/login", authcontroller.Login)
+    http.HandleFunc("/register", authcontroller.Register)
+    http.HandleFunc("/logout", authcontroller.Logout)
+
+    
+
+    
+
 
     log.Println("Server Running on port 8080")
     http.ListenAndServe(":8080", nil)

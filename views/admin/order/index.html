@@ -1,40 +1,63 @@
 {{ define "content" }}
-<div class="card border-0 shadow-sm rounded-4">
-    <div class="card-body p-4">
-        <table class="table table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>No. Order</th>
-                    <th>Pelanggan</th>
-                    <th>Layanan</th>
-                    <th>Total Harga</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{ range .orders }}
-                <tr>
-                    <td>#ORD-{{ .ID }}</td>
-                    <td><i class="bi bi-person me-1"></i> {{ .CustomerName }}</td>
-                    <td>{{ .ServiceName }}</td>
-                    <td class="text-success fw-bold">Rp {{ .TotalPrice }}</td>
-                    <td><span class="badge bg-info">{{ .Status }}</span></td>
-                    <td>
-                        <form action="/admin/order/update" method="POST" class="d-inline">
-                            <input type="hidden" name="id" value="{{ .ID }}">
-                            <select name="status" class="form-select form-select-sm w-auto d-inline" onchange="this.form.submit()">
-                                <option value="" disabled selected>Update</option>
-                                <option value="Cuci">Cuci</option>
-                                <option value="Setrika">Setrika</option>
-                                <option value="Selesai">Selesai</option>
-                            </select>
-                        </form>
-                    </td>
-                </tr>
-                {{ end }}
-            </tbody>
-        </table>
+<div class="container-fluid py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="fw-bold mb-4"><i class="bi bi-cart-check"></i> Kelola Pesanan</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Pelanggan</th>
+                            <th>Layanan</th>
+                            <th>Metode</th>
+                            <th>Total Harga</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .orders }}
+                        <tr>
+                            <td><strong>{{ .CustomerName }}</strong></td>
+                            
+                            <td>{{ .Service.Name }} ({{ .Weight }} Kg)</td>
+                            
+                            <td>
+                                <span class="badge {{ if eq .DeliveryMethod "Antar Jemput" }}bg-warning text-dark{{ else }}bg-info text-dark{{ end }}">
+                                    {{ .DeliveryMethod }}
+                                </span>
+                            </td>
+                            
+                            <td class="fw-bold">Rp {{ .TotalPrice }}</td>
+                            
+                            <td>
+                                <span class="badge {{ if eq .Status "Pending" }}bg-secondary{{ else if eq .Status "Cuci" }}bg-primary{{ else if eq .Status "Setrika" }}bg-info{{ else }}bg-success{{ end }}">
+                                    {{ .Status }}
+                                </span>
+                            </td>
+                            
+                            <td>
+                                <form action="/admin/order/update" method="POST" class="d-flex gap-1">
+                                    <input type="hidden" name="id" value="{{ .ID }}">
+                                    <select name="status" class="form-select form-select-sm" style="width: auto;">
+                                        <option value="Pending" {{ if eq .Status "Pending" }}selected{{ end }}>Pending</option>
+                                        <option value="Cuci" {{ if eq .Status "Cuci" }}selected{{ end }}>Cuci</option>
+                                        <option value="Setrika" {{ if eq .Status "Setrika" }}selected{{ end }}>Setrika</option>
+                                        <option value="Selesai" {{ if eq .Status "Selesai" }}selected{{ end }}>Selesai</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-dark">Update</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{ else }}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">Belum ada data pesanan.</td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 {{ end }}

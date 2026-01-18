@@ -1,0 +1,95 @@
+{{ define "order-modal" }}
+<div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold">Buat Pesanan Baru</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/client/order/create" method="POST">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Jenis Layanan</label>
+                        <select name="service_id" id="serviceSelect" class="form-select" required>
+                            <option value="" disabled selected>-- Pilih Layanan --</option>
+                            {{ range .services }}
+                            <option value="{{ .ID }}" data-price="{{ .PricePerKg }}">
+                                {{ .Name }} - Rp {{ .PricePerKg }}/Kg
+                            </option>
+                            {{ end }}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Metode Pengiriman</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input delivery-radio" type="radio" name="delivery_method" id="delivery1" value="Antar Jemput" checked>
+                                <label class="form-check-label" for="delivery1">Antar Jemput (+5rb)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input delivery-radio" type="radio" name="delivery_method" id="delivery2" value="Ambil Sendiri">
+                                <label class="form-check-label" for="delivery2">Ambil Sendiri</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Estimasi Berat (Kg)</label>
+                        <input type="number" name="weight" id="weightInput" class="form-control" placeholder="0" min="1" step="0.1" required>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 border-dashed">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="text-muted small">Ongkir:</span>
+                            <span class="small fw-bold">Rp <span id="ongkirDisplay">5.000</span></span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small">Total Estimasi:</span>
+                            <h4 class="fw-bold text-primary mb-0">Rp <span id="totalDisplay">0</span></h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary px-4">Kirim Pesanan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const serviceSelect = document.getElementById('serviceSelect');
+    const weightInput = document.getElementById('weightInput');
+    const totalDisplay = document.getElementById('totalDisplay');
+    const ongkirDisplay = document.getElementById('ongkirDisplay');
+    const deliveryRadios = document.querySelectorAll('.delivery-radio');
+
+    function hitungTotal() {
+        const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+        const hargaPerKg = selectedOption.getAttribute('data-price') || 0;
+        const berat = weightInput.value || 0;
+        
+        // Cek Ongkir: jika 'Antar Jemput' maka 5000, jika tidak maka 0
+        let ongkir = 0;
+        deliveryRadios.forEach(radio => {
+            if (radio.checked && radio.value === "Antar Jemput") {
+                ongkir = 5000;
+            }
+        });
+
+        const totalCucian = hargaPerKg * berat;
+        const totalAkhir = totalCucian + ongkir;
+        
+        // Update Tampilan
+        ongkirDisplay.innerText = ongkir.toLocaleString('id-ID');
+        totalDisplay.innerText = totalAkhir.toLocaleString('id-ID');
+    }
+
+    serviceSelect.addEventListener('change', hitungTotal);
+    weightInput.addEventListener('input', hitungTotal);
+    deliveryRadios.forEach(radio => radio.addEventListener('change', hitungTotal));
+</script>
+{{ end }}

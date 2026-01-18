@@ -88,3 +88,14 @@ func UpdateStatus(w http.ResponseWriter, r *http.Request) {
         }
     }
 }
+func AdminDashboard(w http.ResponseWriter, r *http.Request) {
+    // Ambil data dari model
+    tampilOrders := ordermodel.GetAll()
+
+    data := map[string]any{
+        "orders": tampilOrders, // Pastikan namanya "orders"
+    }
+
+    tmpl, _ := template.ParseFiles("views/admin/index.html")
+    tmpl.Execute(w, data)
+}

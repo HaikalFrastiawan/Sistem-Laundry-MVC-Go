@@ -9,4 +9,5 @@ type Customer struct {
     Phone     string
     Address   string
     CreatedAt time.Time
+    Password  string
 }
