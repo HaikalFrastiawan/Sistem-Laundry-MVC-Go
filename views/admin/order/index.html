@@ -1,0 +1,40 @@
+{{ define "content" }}
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>No. Order</th>
+                    <th>Pelanggan</th>
+                    <th>Layanan</th>
+                    <th>Total Harga</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .orders }}
+                <tr>
+                    <td>#ORD-{{ .ID }}</td>
+                    <td><i class="bi bi-person me-1"></i> {{ .CustomerName }}</td>
+                    <td>{{ .ServiceName }}</td>
+                    <td class="text-success fw-bold">Rp {{ .TotalPrice }}</td>
+                    <td><span class="badge bg-info">{{ .Status }}</span></td>
+                    <td>
+                        <form action="/admin/order/update" method="POST" class="d-inline">
+                            <input type="hidden" name="id" value="{{ .ID }}">
+                            <select name="status" class="form-select form-select-sm w-auto d-inline" onchange="this.form.submit()">
+                                <option value="" disabled selected>Update</option>
+                                <option value="Cuci">Cuci</option>
+                                <option value="Setrika">Setrika</option>
+                                <option value="Selesai">Selesai</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{ end }}

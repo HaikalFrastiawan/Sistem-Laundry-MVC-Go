@@ -1,0 +1,57 @@
+{{ define "content" }}
+<div class="row g-4">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <h6 class="fw-bold mb-3"><i class="bi bi-tags-fill me-2"></i>Kelola Harga Layanan</h6>
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Layanan</th>
+                            <th>Harga/Kg</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .services }}
+                        <tr>
+                            <td>{{ .Name }}</td>
+                            <td class="fw-bold">Rp {{ .PricePerKg }}</td>
+                            <td><button class="btn btn-sm text-danger"><i class="bi bi-trash"></i></button></td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <h6 class="fw-bold mb-3"><i class="bi bi-person-badge-fill me-2"></i>Data Karyawan & Gaji</h6>
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Posisi</th>
+                            <th>Gaji Pokok</th>
+                            <th>Bonus/Order</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .employees }}
+                        <tr>
+                            <td>{{ .Name }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ .Role }}</span></td>
+                            <td>Rp {{ .BaseSalary }}</td>
+                            <td class="text-success">+ Rp {{ .BonusPerOrder }}</td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

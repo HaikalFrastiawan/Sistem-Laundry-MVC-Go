@@ -1,16 +1,15 @@
 package homecontroller
 
 import (
-	"net/http"
-	"html/template"
+    "html/template"
+    "net/http"
 )
 
-
-func Index(w http.ResponseWriter, r *http.Request) {	
-	temp, err := template.ParseFiles("views/home/index.html")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	temp.Execute(w, nil)
+// Menampilkan Halaman Depan (Landing Page)
+func Welcome(w http.ResponseWriter, r *http.Request) {
+    temp, err := template.ParseFiles("views/home/landing.html")
+    if err != nil {
+        panic(err)
+    }
+    temp.Execute(w, nil)
 }

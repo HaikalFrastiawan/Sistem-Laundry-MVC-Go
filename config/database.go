@@ -11,7 +11,7 @@ var DB *sql.DB
 
 func ConnectDb() {
 
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/laundry_db?parseTime=true")
+	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/sistem-laundry?parseTime=true")
 	if err != nil {
 		log.Fatal(err)
 	}
