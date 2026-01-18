@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Service Laundry</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">Laundry App</a>
+        <span class="navbar-text text-white">
+            Admin Panel
+        </span>
+    </div>
+</nav>
+
+<!-- Content -->
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Daftar Layanan Laundry</h5>
+            <a href="/services/add" class="btn btn-sm btn-primary">
+                + Tambah Layanan
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-striped table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nama Layanan</th>
+                        <th>Harga / Kg</th>
+                        <th width="180">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ if . }}
+                        {{ range . }}
+                        <tr>
+                            <td>{{ .Name }}</td>
+                            <td>Rp {{ .PricePerKg }}</td>
+                            <td>
+                                <a href="/services/edit?id={{ .ID }}" class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+                                <a href="/services/delete?id={{ .ID }}"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Yakin hapus layanan ini?')">
+                                    Hapus
+                                </a>
+                            </td>
+                        </tr>
+                        {{ end }}
+                    {{ else }}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">
+                                Belum ada layanan laundry
+                            </td>
+                        </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bun
